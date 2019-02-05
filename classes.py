@@ -1,6 +1,16 @@
 import pymysql as sql
 
-class cadastro:
+class conta:
+    def abrir_database(self):
+        self.conexao = sql.connect(
+            host='localhost',
+            user='root',
+            passwd='',
+            database='controle_financas'
+        )
+
+        return self.conexao
+
     def __init__(self):
         self.conexao = sql.connect(
             host = 'localhost',
@@ -14,12 +24,7 @@ class cadastro:
 
         self.conexao.close()
 
-        self.conexao = sql.connect(
-            host = 'localhost',
-            user =  'root',
-            passwd = '',
-            database = 'controle_financas'
-        )
+        self.conexao = self.abrir_database()
 
         self.cursor = self.conexao.cursor()
 
@@ -31,17 +36,12 @@ class cadastro:
 
         self.conexao.close()
 
-    def definir_usuario(self):
+    def cadastrar(self):
         self.nome = input('Informe o nome do usuário: ')
         self.saldo = float(input('Informe o saldo: '))
         self.meta = float(input('Informe a meta: '))
 
-        self.conexao = sql.connect(
-            host = 'localhost',
-            user = 'root',
-            passwd = '',
-            database =  'controle_financas'
-        )
+        self.conexao = self.abrir_database()
 
         self.cursor = self.conexao.cursor()
 
@@ -51,7 +51,47 @@ class cadastro:
 
         self.conexao.close()
 
+    def mostrar_conta(self):
+        self.conexao = self.abrir_database()
 
+        print('\nUsuário cadastrado:\n')
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute('select * from usuarios')
+
+        for x in self.cursor:
+            print(x)
+
+        self.conexao.close()
+
+    def emitir_notificacao(self):
+        print()
+
+    def aviso_meta(self):
+        print()
+
+    def getSaldo(self):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.saldo = self.cursor.execute("select saldo from usuarios where id = '1'")
+
+        return self.saldo
+
+    def getMeta(self):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute("select meta from usuarios where id = '1'")
+
+        self.meta = self.cursor.fetchall()
+
+        for x in self.meta:
+            self.valor = x[2]
+        return self.valor
 
 
 
