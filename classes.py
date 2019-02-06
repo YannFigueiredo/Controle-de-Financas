@@ -1,7 +1,7 @@
 import pymysql as sql
 
 class conta:
-    def abrir_database(self):
+    def abrir_database(self): #Faz a conexão  com o banco de dados do servidor local
         self.conexao = sql.connect(
             host='localhost',
             user='root',
@@ -11,7 +11,7 @@ class conta:
 
         return self.conexao
 
-    def __init__(self):
+    def __init__(self): #Construtor(Define banco de dados e tabelas)
         self.conexao = sql.connect(
             host = 'localhost',
             user = 'root',
@@ -54,14 +54,17 @@ class conta:
     def mostrar_conta(self):
         self.conexao = self.abrir_database()
 
-        print('\nUsuário cadastrado:\n')
+        print('Usuário cadastrado:\n')
 
         self.cursor = self.conexao.cursor()
 
         self.cursor.execute('select * from usuarios')
 
         for x in self.cursor:
-            print(x)
+            self.nome = x[1]
+            self.saldo = x[2]
+            self.meta = x[3]
+            print('Nome: {} - Saldo: R${} - Meta: R${}'.format(self.nome, self.saldo, self.meta))
 
         self.conexao.close()
 
@@ -76,9 +79,12 @@ class conta:
 
         self.cursor = self.conexao.cursor()
 
-        self.saldo = self.cursor.execute("select saldo from usuarios where id = '1'")
+        self.cursor.execute("select saldo from usuarios where id = '1'")
 
-        return self.saldo
+        for x in self.cursor:
+            self.saldo = x[0]
+
+        return float(self.saldo)
 
     def getMeta(self):
         self.conexao = self.abrir_database()
@@ -87,11 +93,21 @@ class conta:
 
         self.cursor.execute("select meta from usuarios where id = '1'")
 
-        self.meta = self.cursor.fetchall()
+        for x in self.cursor:
+            self.meta = x[0]
 
-        for x in self.meta:
-            self.valor = x[2]
-        return self.valor
+        return float(self.meta)
+
+    def alterar_meta(self, nova_meta):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute("update usuarios set meta = '"+nova_meta+"' where id = '1'")
+
+        self.conexao.commit()
+
+        print('\nMeta alterada com sucesso!')
 
 
 

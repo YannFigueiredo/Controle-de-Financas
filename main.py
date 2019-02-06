@@ -16,18 +16,17 @@ cursor = conexao.cursor()
 #usuario.cadastrar()
 
 while True:
-    print('_______________________________________________________________')
-    print('\t\tPROGRAMA CONTROLE DE FINANÇAS')
-    print('_______________________________________________________________')
+    print('_'*60)
+    print('\t\t\t\tCONTROLE DE FINANÇAS')
+    print('_'*60)
     print('[1] Perfil do usuário\n[2] Registrar débito\n[3] Registrar crédito\n[4] Mostrar histórico de débito\n[5] Mostrar histórico de crédito\n[6] Alterar meta\n[7] Sair')
     op = int(input('Informe a opção: '))
+    print('_'*60)
 
     if op == 1:
         usuario.mostrar_conta()
     elif op == 2:
-        x = usuario.getMeta()
-
-        print(x)
+        print('')
     elif op == 3:
         print('')
     elif op == 4:
@@ -35,7 +34,8 @@ while True:
     elif op == 5:
         print('')
     elif op == 6:
-        print('')
+        nova_meta = input('Informe a nova meta: ')
+        usuario.alterar_meta(nova_meta)
     elif op == 7:
         print('Saindo...')
         break
