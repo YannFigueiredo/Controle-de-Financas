@@ -2,6 +2,7 @@ import classes
 import pymysql as sql
 
 usuario = classes.conta()
+oper = classes.operacao()
 
 conexao = sql.connect(
     host = 'localhost',
@@ -26,13 +27,19 @@ while True:
     if op == 1:
         usuario.mostrar_conta()
     elif op == 2:
-        print('')
+        desc = input('Informe a descrição: ')
+        valor = input('Informe o valor: ')
+        data = input('Informe a data(ano-mês-dia): ')
+        oper.ajustar_valor_deb(desc, valor, data)
     elif op == 3:
-        print('')
+        desc = input('Informe a descrição: ')
+        valor = input('Informe o valor: ')
+        data = input('Informe a data(ano-mês-dia): ')
+        oper.ajustar_valor_cred(desc, valor, data)
     elif op == 4:
-        print('')
+        oper.historico_deb()
     elif op == 5:
-        print('')
+        oper.historico_cred()
     elif op == 6:
         nova_meta = input('Informe a nova meta: ')
         usuario.alterar_meta(nova_meta)

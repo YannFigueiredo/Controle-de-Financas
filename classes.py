@@ -110,5 +110,79 @@ class conta:
         print('\nMeta alterada com sucesso!')
 
 
+class operacao(conta):
+    def ajustar_valor_cred(self, desc, valor, data):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute("insert into credito(id_cred, descricao, valor, data) values(default, '"+desc+"', '"+valor+"','"+data+"')")
+
+        self.cursor.execute("select saldo from usuarios where id = '1'")
+
+        for x in self.cursor:
+            self.novo_saldo = x[0]
+
+        self.novo_saldo = self.novo_saldo + float(valor)
+
+        self.cursor.execute("update usuarios set saldo = '" + str(self.novo_saldo) + "' where id = '1'")
+
+        self.conexao.commit()
+
+        self.conexao.close()
+
+    def ajustar_valor_deb(self, desc, valor, data):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute("insert into debito(id_deb, descricao, valor, data) values(default, '" + desc + "', '" + valor + "','" + data + "')")
+
+        self.cursor.execute("select saldo from usuarios where id = '1'")
+
+        for x in self.cursor:
+            self.novo_saldo = x[0]
+
+        self.novo_saldo = float(self.novo_saldo) - float(valor)
+
+        self.cursor.execute("update usuarios set saldo = '" + str(self.novo_saldo) + "' where id = '1'")
+
+        self.conexao.commit()
+
+        self.conexao.close()
+
+    def historico_deb(self):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute("select descricao, valor, data from debito")
+
+        print('Histórico de débito:\n')
+
+        for x in self.cursor:
+            self.desc = x[0]
+            self.val = x[1]
+            self.dat = x[2]
+
+            print("Descrição: {} - Valor: RS{} - Data: {}".format(self.desc, self.val, self.dat))
+
+    def historico_cred(self):
+        self.conexao = self.abrir_database()
+
+        self.cursor = self.conexao.cursor()
+
+        self.cursor.execute("select descricao, valor, data from credito")
+
+        print('Histórico de crédito:\n')
+
+        for x in self.cursor:
+            self.desc = x[0]
+            self.val = x[1]
+            self.dat = x[2]
+
+            print("Descrição: {} - Valor: RS{} - Data: {}".format(self.desc, self.val, self.dat))
+
+
 
 
